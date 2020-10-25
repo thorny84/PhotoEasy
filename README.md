@@ -3,6 +3,41 @@ PhotoEasy reduces the complexity of requesting an image via the camera, with var
 
 Attention, PhotoEasy is optimized for versions from 16 to 30 and uses features that require the presence of a camera, so if you decide to use it in production your application will not be identified in the playStore of devices without a camera.
 
+
+## Install
+- Gradle mode:</br>
+  add it in your root build.gradle at the end of repositories:
+  ```
+  allprojects {
+  	repositories {
+  		...
+  		maven { url 'https://jitpack.io' }
+  	}
+  }
+  ```
+  add the dependency:
+  ```
+  dependencies {
+	  implementation 'com.github.thorny84:PhotoEasy:1.0.2'
+	}
+  ```
+- Maven mode:
+  ```
+  <repositories>
+  	<repository>
+  		  <id>jitpack.io</id>
+  		  <url>https://jitpack.io</url>
+  	</repository>
+  </repositories>
+  ```
+  add the dependency:
+  ```
+	<dependency>
+	  <groupId>com.github.thorny84</groupId>
+	  <artifactId>PhotoEasy</artifactId>
+	  <version>1.0.2</version>
+	</dependency>
+  ```
 ## Usage
 Now, we use the builder to initialize PhotoEasy in the Activity or Fragment in this way:
 ```
