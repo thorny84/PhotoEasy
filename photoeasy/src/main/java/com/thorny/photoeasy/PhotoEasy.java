@@ -14,13 +14,17 @@ import androidx.annotation.NonNull;
 
 import static android.app.Activity.RESULT_OK;
 
+/**
+ * PhotoEasy reduces the complexity of requesting an image via the camera,
+ * with various settings that can help you customize the event.
+ */
 public final class PhotoEasy {
 
   private final int REQUEST_CAMERA_KEY = 1566;
   private final ContentResolver contentResolver;
   private final Boolean enableRequestPermission;
   private File fileDirectory;
-  private ExternalStoragePermission defaultExternalStoragePermission;
+  private ExternalStoragePermission externalStoragePermission;
   MimeType mimeType;
   private String fileName;
   private StorageType storageType;
@@ -31,14 +35,17 @@ public final class PhotoEasy {
       final Activity activity,
       final StorageType storageType,
       final ExternalStoragePermission externalStoragePermission,
-      final Boolean enablePermission) {
+      final boolean enablePermission) {
+
     setStorageType(activity, storageType);
     setExternalPermission(activity, externalStoragePermission);
     contentResolver = activity.getContentResolver();
     enableRequestPermission = enablePermission;
   }
 
-  private void setStorageType(Activity activity, StorageType type) {
+  private void setStorageType(
+      final Activity activity,
+      final StorageType type) {
     storageType = type;
     switch (type) {
       case internal:
@@ -49,48 +56,50 @@ public final class PhotoEasy {
     }
   }
 
-  private void setExternalPermission(final Activity activity, final ExternalStoragePermission externalStoragePermission) {
+  private void setExternalPermission(
+      final Activity activity,
+      final ExternalStoragePermission externalStoragePermission) {
     if (externalStoragePermission == null) {
-      defaultExternalStoragePermission = new DefaultStoragePermission(activity);
+      this.externalStoragePermission = new DefaultStoragePermission(activity);
       return;
     }
-    defaultExternalStoragePermission = externalStoragePermission;
+    this.externalStoragePermission = externalStoragePermission;
   }
 
-  private void setMimeType(MimeType mimeType) {
+  private void setMimeType(final MimeType mimeType) {
     this.mimeType = mimeType;
   }
 
-  private void setName(String fileName) {
+  private void setName(final String fileName) {
     this.fileName = fileName;
   }
 
-  private void setCustomDirectory(String directoryName){
+  private void setCustomDirectory(final String directoryName) {
     this.customDirectory = directoryName;
   }
 
-  public void onActivityResult(
-      int requestCode,
-      int resultCode,
+  public final void onActivityResult(
+      final int requestCode,
+      final int resultCode,
       @NonNull OnPictureReady onPictureReady) {
 
     if (requestCode != REQUEST_CAMERA_KEY || resultCode != RESULT_OK)
       return;
 
     final BitmapCreator bitmapCreator = new BitmapCreator();
-    final Bitmap bitmap = bitmapCreator.getBitmapfromContentResolver(contentResolver, lastUri);
+    final Bitmap bitmap = bitmapCreator.getBitmapFromContentResolver(contentResolver, lastUri);
 
     onPictureReady.onFinish(bitmap);
   }
 
-  public void startActivityForResult(Activity activity) {
+  public final void startActivityForResult(final Activity activity) {
 
     if (enableRequestPermission)
       if (storageType == StorageType.external || storageType == StorageType.media) {
         if (!isExternalStorageWritable())
           return;
-        if (!defaultExternalStoragePermission.permissionCheck()) {
-          defaultExternalStoragePermission.init();
+        if (!externalStoragePermission.permissionCheck()) {
+          externalStoragePermission.init();
           return;
         }
       }
@@ -131,7 +140,7 @@ public final class PhotoEasy {
     private String fileName;
     private StorageType storageType = StorageType.external;
     private ExternalStoragePermission externalStoragePermission;
-    private Boolean enablePermission = true;
+    private boolean enablePermission = true;
     private String customDir = null;
 
     public final Builder setActivity(@NonNull Activity activity) {
@@ -149,6 +158,11 @@ public final class PhotoEasy {
       return this;
     }
 
+    /**
+     * Use to set type of storage.</br>
+     *
+     * @param type {@link StorageType}
+     */
     public final Builder setStorageType(@NonNull StorageType type) {
       this.storageType = type;
       return this;
@@ -159,12 +173,12 @@ public final class PhotoEasy {
       return this;
     }
 
-    public final Builder enableRequestPermission(@NonNull Boolean value) {
+    public final Builder enableRequestPermission(boolean value) {
       this.enablePermission = value;
       return this;
     }
 
-    public final Builder saveInCustomDirectory(@NonNull String directoryName){
+    public final Builder saveInCustomDirectory(@NonNull String directoryName) {
       this.customDir = directoryName;
       return this;
     }
@@ -172,10 +186,12 @@ public final class PhotoEasy {
     public final PhotoEasy build() {
       if (activity == null)
         throw new IllegalArgumentException("activity not set or null");
-      if (externalStoragePermission != null && storageType != StorageType.external)
+      if (externalStoragePermission != null && !(storageType == StorageType.external || storageType == StorageType.media))
         throw new IllegalArgumentException("permission for external storage is settable only with external storage type");
       if (externalStoragePermission != null && !enablePermission)
         throw new IllegalArgumentException("set enable request permission");
+      if (customDir != null && storageType != StorageType.media)
+        throw new IllegalArgumentException("use custom directory only with storage type media");
 
       final PhotoEasy instance = new PhotoEasy(activity, storageType, externalStoragePermission, enablePermission);
       instance.setMimeType(mimeType);
@@ -186,14 +202,41 @@ public final class PhotoEasy {
     }
   }
 
-  // Storage Type
+  /**
+   * Storage type supported.</br>
+   * <ul>
+   *   <li>
+   *     {@link StorageType#internal} App-specific internal storage, intended for the exclusive use of your application,
+   *      not accessible from other applications. From the API 29 images are encrypted.
+   *   </li>
+   *   <li>
+   *     {@link StorageType#external} App-specific external storage, these images are available to other applications only with permissions.
+   *   </li>
+   *   <li>
+   *     {@link StorageType#media} Storage in multimedia directory, these images are visible from all applications without the need permissions.
+   *   </li>
+   * </ul>
+   */
   public enum StorageType {
+    /**
+     * App-specific internal storage, intended for the exclusive use of your application,
+     * not accessible from other applications. From the API 29 images are encrypted.
+     */
     internal,
+    /**
+     * App-specific external storage, these images are available to other applications
+     * only with permissions.
+     */
     external,
+    /**
+     * Storage in multimedia directory, these images are visible from all applications without the need permissions.
+     */
     media
   }
 
-  // Picture mime type
+  /**
+   * Mime type supported
+   */
   public enum MimeType {
     imageJpeg,
     imagePng,

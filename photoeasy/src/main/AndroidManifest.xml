@@ -1,10 +1,12 @@
-<manifest package="com.thorny.photoeasy"
+<manifest xmlns:tools="http://schemas.android.com/tools"
+  package="com.thorny.photoeasy"
   xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--This feature requires the application,
     otherwise it will not be displayed on the play store-->
     <uses-feature android:name="android.hardware.camera" android:required="true" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28"
+      tools:ignore="ScopedStorage" />
 
     <application>
         <provider

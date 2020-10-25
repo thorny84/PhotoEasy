@@ -11,9 +11,8 @@ import com.thorny.photoeasy.ExternalStoragePermission;
 import com.thorny.photoeasy.OnPictureReady;
 import com.thorny.photoeasy.PhotoEasy;
 
-import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
 
   ImageView imageView;
@@ -31,8 +30,7 @@ public class MainActivity extends AppCompatActivity {
     photoEasy = PhotoEasy.builder()
         .setActivity(this)
         .setMimeType(PhotoEasy.MimeType.imagePng)
-        .setStorageType(PhotoEasy.StorageType.media)
-        .saveInCustomDirectory("dircus")
+        .setStorageType(PhotoEasy.StorageType.internal)
         .build();
     photoEasy.startActivityForResult(this);
   }
@@ -45,23 +43,17 @@ public class MainActivity extends AppCompatActivity {
       public void onFinish(Bitmap thumbnail) {
         imageView.setImageBitmap(thumbnail);
       }
-
-      @Override
-      public void onFailure() {
-
-      }
     });
   }
 
   private static class ExtStoPer extends ExternalStoragePermission {
 
     public ExtStoPer(Activity activity) {
-      super(activity,RequestMode.alwaysRequest);
+      super(activity,RequestMode.allControl);
     }
 
     @Override
     public void requestPermissionRationale() {
-
     }
 
     @Override

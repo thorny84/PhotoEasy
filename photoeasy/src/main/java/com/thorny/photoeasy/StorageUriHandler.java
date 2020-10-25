@@ -20,7 +20,10 @@ public final class StorageUriHandler {
   private final String mimeType;
   private final String typeSuffix;
 
-  public StorageUriHandler(Activity activity, String fileName, PhotoEasy.MimeType mimeType) {
+  public StorageUriHandler(
+      final Activity activity,
+      final String fileName,
+      final PhotoEasy.MimeType mimeType) {
     this.activity = activity;
     this.filename = fileName != null ? fileName : String.valueOf(System.nanoTime());
     switch (mimeType) {

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PhotoEasy Sample</string>
+  <string name="camera">Camera</string>
+  <string name="image">image</string>
 </resources>

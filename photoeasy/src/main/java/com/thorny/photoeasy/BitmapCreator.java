@@ -1,7 +1,4 @@
-package com.thorny.photoeasy;/*
- <<<HEADER PLACEHOLDER>>>
-  Creation date: 08/10/2020
- */
+package com.thorny.photoeasy;
 
 import android.content.ContentResolver;
 import android.graphics.Bitmap;
@@ -16,7 +13,9 @@ import java.io.InputStream;
 
 public final class BitmapCreator {
 
-  public Bitmap getBitmapfromContentResolver(ContentResolver contentResolver, Uri lastUri){
+  public Bitmap getBitmapFromContentResolver(
+      final ContentResolver contentResolver,
+      final Uri lastUri){
     Bitmap bitmap = null;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
       final ImageDecoder.Source source = ImageDecoder.createSource(contentResolver, lastUri);
