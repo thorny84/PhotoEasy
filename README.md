@@ -22,7 +22,7 @@ Attention, PhotoEasy is optimized for versions from 16 to 30 and uses features t
 	}
   ```
 - Maven mode:
-  ```
+  ```xml
   <repositories>
   	<repository>
   		  <id>jitpack.io</id>
@@ -31,7 +31,7 @@ Attention, PhotoEasy is optimized for versions from 16 to 30 and uses features t
   </repositories>
   ```
   add the dependency:
-  ```
+  ```xml
 	<dependency>
 	  <groupId>com.github.thorny84</groupId>
 	  <artifactId>PhotoEasy</artifactId>
@@ -40,7 +40,7 @@ Attention, PhotoEasy is optimized for versions from 16 to 30 and uses features t
   ```
 ## Usage
 Now, we use the builder to initialize PhotoEasy in the Activity or Fragment in this way:
-```
+```java
 PhotoEasy photoEasy = PhotoEasy.builder()
   .setActivity(this)
   .build()
@@ -49,7 +49,7 @@ the only mandatory buider method is `setActivity`, whitout it PhotoEasy generate
 `build()` open the system application camera.
 
 Next step is get a image that we took. Add in `onActivityResult` of activity after the `super`:
-```
+```java
 photoEasy.onActivityResult(requestCode, resultCode, new OnPictureReady() {
    @Override
    public void onFinish(Bitmap thumbnail) {}
@@ -60,7 +60,7 @@ if the creation of the bitmap fails the thumbnail will be `null`.
 ## MimeType
 Supported mime types are: `Jpeg`,`Png`,`Webp`.
 To set mime type use buider setter with `PhotoEasy.MimeType`:
-```
+```java
 PhotoEasy photoEasy = PhotoEasy.builder()
   .setActivity(this)
   .setMimeType(PhotoEasy.MimeType.imagePng)
@@ -70,7 +70,7 @@ Default mime is `Jpeg`
 
 ## Image name
 If we want to have a specific name for the image file, we can do:
-```
+```java
 PhotoEasy photoEasy = PhotoEasy.builder()
   .setActivity(this)
   .setPhotoName("image name")
@@ -80,7 +80,7 @@ PhotoEasy photoEasy = PhotoEasy.builder()
 ## Storage Type
 We choose where we want to place our image file.</br>
 To specify the type of storage use `PhotoEasy.StorageType`:
-```
+```java
 PhotoEasy photoEasy = PhotoEasy.builder()
   .setActivity(this)
   .setStorageType(PhotoEasy.StorageType.media)
@@ -95,7 +95,7 @@ Some of these need permissions requested from the user...
 
 ## Permissions
 Using `PhotoEasy.StorageType.external` or `PhotoEasy.StorageType.media` you need to set permissions to save images, at least up to API 28. PhotoEasy manages permissions internally but if you want to manage them you have to set them:
-```
+```java
 PhotoEasy photoEasy = PhotoEasy.builder()
   .setActivity(this)
   .enableRequestPermission(false)
@@ -103,14 +103,14 @@ PhotoEasy photoEasy = PhotoEasy.builder()
 ```
 this could generate unexpected exceptions if the permissions are not handled excellently by you.</br>
 Leaving the management of permissions to PhotoEasy, but you want control of actions after user choice, you can use:
-```
+```java
 PhotoEasy photoEasy = PhotoEasy.builder()
   .setActivity(this)
   .setExternalStoragePermission(myExternalStoragePermission)
   .build()
 ```
 extending class:
-```
+```java
 public class ExtStoPer extends ExternalStoragePermission {
 
   public ExtStoPer(Activity activity) {
@@ -131,7 +131,7 @@ public class ExtStoPer extends ExternalStoragePermission {
 
 ## Custom directory
 With `PhotoEasy.StorageType.media` we can save our image in a custom directory:
-```
+```java
 PhotoEasy photoEasy = PhotoEasy.builder()
   .setActivity(this)
   .setStorageType(PhotoEasy.StorageType.media)
