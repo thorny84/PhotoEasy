@@ -2,13 +2,17 @@
 
 buildscript {
     
+    ext {
+        agp_version = '8.5.1'
+        kotlin_version = '2.0.0'
+    }
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath "com.android.tools.build:gradle:$agp_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
 
         // NOTE: Do not place your application dependencies here; they belong

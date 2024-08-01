@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
     photoEasy = PhotoEasy.builder()
         .setActivity(this)
         .setMimeType(PhotoEasy.MimeType.imagePng)
-        .setStorageType(PhotoEasy.StorageType.internal)
+        .setStorageType(PhotoEasy.StorageType.media)
         .build();
     photoEasy.startActivityForResult(this);
   }
