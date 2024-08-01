@@ -40,6 +40,13 @@ Attention, PhotoEasy is optimized for versions from 16 to 30 and uses features t
   ```
 ## Usage
 Now, we use the builder to initialize PhotoEasy in the Activity or Fragment in this way:
+Kotlin:
+```kotlin
+val photoEasy: PhotoEasy = PhotoEasy.builder()
+  .setActivity(this)
+  .build()
+```
+Java:
 ```java
 PhotoEasy photoEasy = PhotoEasy.builder()
   .setActivity(this)
@@ -49,6 +56,13 @@ the only mandatory buider method is `setActivity`, whitout it PhotoEasy generate
 `build()` open the system application camera.
 
 Next step is get a image that we took. Add in `onActivityResult` of activity after the `super`:
+Kotlin:
+```kotlin
+photoEasy.onActivityResult(requestCode, resultCode) { thumbnail ->
+            ...
+}
+```
+Java:
 ```java
 photoEasy.onActivityResult(requestCode, resultCode, new OnPictureReady() {
    @Override
@@ -60,6 +74,14 @@ if the creation of the bitmap fails the thumbnail will be `null`.
 ## MimeType
 Supported mime types are: `Jpeg`,`Png`,`Webp`.
 To set mime type use buider setter with `PhotoEasy.MimeType`:
+Kotlin:
+```kotlin
+val photoEasy: PhotoEasy = PhotoEasy.builder()
+  .setActivity(this)
+  .setMimeType(PhotoEasy.MimeType.imagePng)
+  .build()
+```
+Java:
 ```java
 PhotoEasy photoEasy = PhotoEasy.builder()
   .setActivity(this)
@@ -70,6 +92,14 @@ Default mime is `Jpeg`
 
 ## Image name
 If we want to have a specific name for the image file, we can do:
+Kotlin:
+```kotlin
+val photoEasy: PhotoEasy = PhotoEasy.builder()
+  .setActivity(this)
+  .setPhotoName("image name")
+  .build()
+```
+Java:
 ```java
 PhotoEasy photoEasy = PhotoEasy.builder()
   .setActivity(this)
@@ -80,6 +110,14 @@ PhotoEasy photoEasy = PhotoEasy.builder()
 ## Storage Type
 We choose where we want to place our image file.</br>
 To specify the type of storage use `PhotoEasy.StorageType`:
+Kotlin:
+```kotlin
+val photoEasy: PhotoEasy = PhotoEasy.builder()
+  .setActivity(this)
+  .setStorageType(PhotoEasy.StorageType.media)
+  .build()
+```
+Java:
 ```java
 PhotoEasy photoEasy = PhotoEasy.builder()
   .setActivity(this)
@@ -95,6 +133,14 @@ Some of these need permissions requested from the user...
 
 ## Permissions
 Using `PhotoEasy.StorageType.external` or `PhotoEasy.StorageType.media` you need to set permissions to save images, at least up to API 28. PhotoEasy manages permissions internally but if you want to manage them you have to set them:
+Kotlin:
+```kotlin
+val photoEasy: PhotoEasy = PhotoEasy.builder()
+  .setActivity(this)
+  .enableRequestPermission(false)
+  .build()
+```
+Java:
 ```java
 PhotoEasy photoEasy = PhotoEasy.builder()
   .setActivity(this)
@@ -103,6 +149,14 @@ PhotoEasy photoEasy = PhotoEasy.builder()
 ```
 this could generate unexpected exceptions if the permissions are not handled excellently by you.</br>
 Leaving the management of permissions to PhotoEasy, but you want control of actions after user choice, you can use:
+Kotlin:
+```kotlin
+val photoEasy: PhotoEasy = PhotoEasy.builder()
+  .setActivity(this)
+  .setExternalStoragePermission(myExternalStoragePermission)
+  .build()
+```
+Java:
 ```java
 PhotoEasy photoEasy = PhotoEasy.builder()
   .setActivity(this)
@@ -110,6 +164,16 @@ PhotoEasy photoEasy = PhotoEasy.builder()
   .build()
 ```
 extending class:
+Kotlin:
+```kotlin
+class ExtStoPer(activity: Activity): ExternalStoragePermission(activity, RequestMode.allControl) {
+        override fun requestPermissionRationale() {
+        }
+        override fun requestPermission() {
+        }
+    }
+```
+Java:
 ```java
 public class ExtStoPer extends ExternalStoragePermission {
 
@@ -131,6 +195,15 @@ public class ExtStoPer extends ExternalStoragePermission {
 
 ## Custom directory
 With `PhotoEasy.StorageType.media` we can save our image in a custom directory:
+Kotlin:
+```kotlin
+val photoEasy: PhotoEasy = PhotoEasy.builder()
+  .setActivity(this)
+  .setStorageType(PhotoEasy.StorageType.media)
+  .saveInCustomDirectory("Custom_directory")
+  .build()
+```
+Java:
 ```java
 PhotoEasy photoEasy = PhotoEasy.builder()
   .setActivity(this)
